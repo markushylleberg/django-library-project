@@ -1,0 +1,55 @@
+{% extends './_base.html' %}
+
+{% block content %}
+
+    <div class="m-2">
+        <h1><b>Dashboard</b></h1>
+        <h4>{{ response }}</h4>
+        <div class="mt-4">
+            <a class="mx-1" href="{% url 'dashboard:dashboard' %}">All</a>
+            <a class="mx-1" href="{% url 'dashboard:books' %}">Books</a>
+            <a class="mx-1" href="{% url 'dashboard:magazines' %}">Magazines</a>
+        </div>
+
+        {% if materials %}
+            <table class="table mt-3">
+                <thead>
+                    <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Author</th>
+                    <th scope="col">Year</th>
+                    <th scope="col">Language</th>
+                    <th scope="col">Pages</th>
+                    <th scope="col">Copies available</th>
+                    <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for material in materials %}
+                    <tr>
+                        {% if material.material_type == 'book' %}
+                            <td><i class="fa fa-book text-info"></i></td>
+                        {% else %}
+                            <td><i class="fa fa-sticky-note text-info"></<i></td>
+                        {% endif %}
+                        <td scope="row">{{ material.title }}</td>
+                        <td>{{ material.author }}</td>
+                        <td>{{ material.year }}</td>
+                        <td>{{ material.language }}</td>
+                        <td>{{ material.pages }}</td>
+                        <td class="text-center">{{ material.quantity_available }}</td>
+                        <form action="" method="POST">
+                            <input type="hidden" value="{{ material.pk }}">
+                            <td><button class="btn btn-info">Loan</button></td>
+                        </form>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="mt-3">Sorry! There is no {{ type }} available.</p>
+        {% endif %}
+    </div>
+    
+{% endblock %}

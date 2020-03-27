@@ -1,0 +1,59 @@
+{% extends './_base.html' %}
+
+{% block content %}
+
+    <div class="m-2">
+        <h1><b>Add new material</b></h1>
+
+    <form action="{% url 'add_material' %}" method="POST">
+        {% csrf_token %}
+        <div class="select-pair">
+            <label for="material_type">Book or Magazine?</label>
+            <select id="material_type" name="material_type" onchange="checkIfBookOrMagazine(event)">
+                <option value="book" selected>Book</option>
+                <option value="magazine">Magazine</option>
+            </select>
+        </div>
+        <div class="input-pair" id="authorField">
+            <label for="material_author">Author</label>
+            <input type="text" name="material_author" id="material_author" />
+        </div>
+        <div class="input-pair">
+            <label for="material_title">Title</label>
+            <input type="text" name="material_title" id="material_title" />
+        </div>
+        <div class="select-pair">
+            <label for="material_language">Language</label>
+            <select id="material_language" name="material_language">
+                <option value="Danish">Danish</option>
+                <option value="English" selected>English</option>
+                <option value="French">French</option>
+                <option value="German">German</option>
+                <option value="Spanish">Spanish</option>
+                <option value="Swedish">Swedish</option>
+                <option value="Norwegian">Norwegian</option>
+            </select>
+        </div>
+        <div class="input-pair">
+            <label for="material_year">Year</label>
+            <input type="number" name="material_year" id="material_year" />
+        </div>
+        <div class="input-pair">
+            <label for="material_pages">Pages</label>
+            <input type="number" name="material_pages" id="material_pages" />
+        </div>
+        <div class="input-pair">
+            <label for="material_quantiy">Quantity</label>
+            <input type="number" name="material_quantity" id="material_quantity" />
+        </div>
+
+    <button class="btn btn-success">ADD</button>
+    </form>
+
+    {% if message %}
+        <p>{{ message }}</p>
+    {% endif %}
+
+    </div>
+
+{% endblock %}
