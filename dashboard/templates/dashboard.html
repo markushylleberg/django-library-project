@@ -27,7 +27,11 @@
                 </thead>
                 <tbody>
                     {% for material in materials %}
-                    <tr>
+                    {% if material.quantity_available == 0 %}
+                        <tr class="disabled-tr">
+                    {% else %}
+                        <tr>
+                    {% endif %}
                         {% if material.material_type == 'book' %}
                             <td><i class="fa fa-book text-info"></i></td>
                         {% else %}
@@ -41,7 +45,11 @@
                         <td class="text-center">{{ material.quantity_available }}</td>
                         <form action="" method="POST">
                             <input type="hidden" value="{{ material.pk }}">
-                            <td><button class="btn btn-info">Loan</button></td>
+                            {% if material.quantity_available == 0 %}
+                                <td><button class="btn btn-info disabled" disabled>Loan</button></td>
+                            {% else %}
+                                <td><button class="btn btn-info">Loan</button></td>
+                            {% endif %}
                         </form>
                     </tr>
                     {% endfor %}

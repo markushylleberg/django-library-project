@@ -2,3 +2,13 @@
     opacity: 0;
     pointer-events: none;
 }
+
+.disabled-tr{
+    background-color: rgba(128, 128, 128, 0.1);
+    color: rgb(143, 143, 143);
+}
+
+.disabled-tr button{
+    background-color: rgba(255, 0, 0, 0.3)!important;
+    border: rgba(255, 0, 0, 0.3)!important;
+}
