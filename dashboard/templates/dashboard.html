@@ -5,6 +5,9 @@
     <div class="m-2">
         <h1><b>Dashboard</b></h1>
         <h4>{{ response }}</h4>
+        {% if message %}
+            <p>{{ message }}</p>
+        {% endif %}
         <div class="mt-4">
             <a class="mx-1" href="{% url 'dashboard:dashboard' %}">All</a>
             <a class="mx-1" href="{% url 'dashboard:books' %}">Books</a>
@@ -21,37 +24,41 @@
                     <th scope="col">Year</th>
                     <th scope="col">Language</th>
                     <th scope="col">Pages</th>
-                    <th scope="col">Copies available</th>
                     <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for material in materials %}
-                    {% if material.quantity_available == 0 %}
-                        <tr class="disabled-tr">
-                    {% else %}
-                        <tr>
-                    {% endif %}
-                        {% if material.material_type == 'book' %}
-                            <td><i class="fa fa-book text-info"></i></td>
+                        {% if material.is_loaned %}
+                            <tr class="disabled-tr" disabled>
                         {% else %}
-                            <td><i class="fa fa-sticky-note text-info"></<i></td>
+                            <tr>
                         {% endif %}
-                        <td scope="row">{{ material.title }}</td>
-                        <td>{{ material.author }}</td>
-                        <td>{{ material.year }}</td>
-                        <td>{{ material.language }}</td>
-                        <td>{{ material.pages }}</td>
-                        <td class="text-center">{{ material.quantity_available }}</td>
-                        <form action="" method="POST">
-                            <input type="hidden" value="{{ material.pk }}">
-                            {% if material.quantity_available == 0 %}
-                                <td><button class="btn btn-info disabled" disabled>Loan</button></td>
+                            {% if material.material_id.material_type == 'book' %}
+                                {% if book_count == 10 %}
+                                    <td class="maximum-reached text-center"><i class="fa fa-book text-white"></i></td>
+                                {% else %}
+                                    <td class="text-center"><i class="fa fa-book text-info"></i></td>
+                                {% endif %}
                             {% else %}
-                                <td><button class="btn btn-info">Loan</button></td>
+                                {% if magazine_count == 3 %}
+                                    <td class="maximum-reached text-center"><i class="fa fa-sticky-note text-white"></<i></td>
+                                {% else %}
+                                    <td class="text-center"><i class="fa fa-sticky-note text-info"></<i></td>
+                                {% endif %}
                             {% endif %}
-                        </form>
-                    </tr>
+                            <td>{{ material.material_id.title }}</td>
+                            <td>{{ material.material_id.author }}</td>
+                            <td>{{ material.material_id.year }}</td>
+                            <td>{{ material.material_id.language }}</td>
+                            <td>{{ material.material_id.pages }}</td>
+                            <form action="{% url 'new_loan' %}" method="POST">
+                            {% csrf_token %}
+                                <input type="hidden" value="{{ material.material_id.id }}" name="material_data" />
+                                <input type="hidden" value="{{ material.id }}" name="material_id" />
+                                <td><button class="btn btn-info"><i class="fa fa-plus"></i> Loan</button></td>
+                            </form>
+                        </tr>
                     {% endfor %}
                 </tbody>
             </table>

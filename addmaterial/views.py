@@ -1,7 +1,29 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from .models import Addmaterial
+from .models import Addmaterial, Publishmaterial
+from django.contrib.auth.models import User
 
-def add_material(req):
+
+@login_required(login_url='/account/login/')
+def publish_material(req):
+    context = {
+        'materials': Addmaterial.objects.all().order_by('title'),
+    }
+    if req.method == 'POST':
+        material_to_publish = Addmaterial.objects.filter(id=req.POST['material_entry'])[0]
+        new_published_book = Publishmaterial()
+        new_published_book.material_id = material_to_publish
+        new_published_book.published_by = req.user
+        new_published_book.save()
+        context = {
+            'message': f'You have succesfully published { new_published_book }! - You can now see it on the dashboard.',
+            'materials': Addmaterial.objects.all(),
+        }
+    return render(req, 'add_material.html', context)
+
+
+@login_required(login_url='/account/login/')
+def register_material(req):
     context = {}
     if req.method == 'POST':
         ### Submitted data
@@ -39,4 +61,4 @@ def add_material(req):
                 'message': f'You have successfully added the {material_type} {title}!'
             }
 
-    return render(req, 'add_material.html', context)
+    return render(req, 'register_material.html', context)

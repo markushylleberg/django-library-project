@@ -4,15 +4,44 @@
 
     <div class="m-2">
         <h1><b>My loans</b></h1>
+        <h4>Books: {{ book_count }}</h4>
+        <h4>Magazines: {{ magazine_count }}</h4>
+        {% if user_loans %}
+            <table class="table mt-3">
+                <thead>
+                    <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Author</th>
+                    <th scope="col">Loaned on</th>
+                    <th scope="col">Return no later than</th>
+                    <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user_loan in user_loans %}
+                        <tr>
+                            {% if user_loan.book_id.material_id.material_type == 'book' %}
+                                <td><i class="fa fa-book text-info"></i></td>
+                            {% else %}
+                                <td><i class="fa fa-sticky-note text-info"></<i></td>
+                            {% endif %}
+                            <td scope="row">{{ user_loan.book_id }}</td>
+                            <td>{{ user_loan.book_id.material_id.author }}</td>
+                            <td class="text-success">{{ user_loan.loan_datetime }}</td>
+                            <td class="text-danger"><b>{{ user_loan.loan_return_datetime }}</b></td>
+                            <form action="{% url 'return_loan' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" value="{{ user_loan.id }}" name="loan_id">
+                            <td><button class="btn btn-info"><i class="fa fa-undo"></i> Return</button></td>
+                            </form>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="mt-3">You have no loans at the moment.</p>
+        {% endif %}
     </div>
-
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-
     
 {% endblock %}

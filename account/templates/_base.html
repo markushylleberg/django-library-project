@@ -33,7 +33,8 @@
                 </ul>
             </div>
             </nav>
-            <a href="{% url 'add_material' %}"><button type="button" class="btn btn-success m-2">+ Add new</button></a>
+            <a href="{% url 'publish_material' %}"><button type="button" class="btn btn-success m-2">+ Publish books/magazines</button></a>
+            <a href="{% url 'register_material' %}"><button type="button" class="btn btn-info m-2">Register material to system</button></a>
         {% else %}
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <a class="navbar-brand" href="{% url 'dashboard:dashboard' %}">Welcome {{ user }}!</a>
